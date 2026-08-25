@@ -1,8 +1,10 @@
 "use client"
 
 import useSWR from "swr"
-import { HomeIcon } from "lucide-react"
+import Link from "next/link"
+import { Bookmark, History, HomeIcon } from "lucide-react"
 import { PropertyCard } from "@/components/dashboard/property-card"
+import { buttonVariants } from "@/components/ui/button"
 import { fetcher, saveProperty, unsaveProperty } from "@/lib/api"
 import type { Property } from "@/lib/types"
 
@@ -30,11 +32,21 @@ export default function MyPropertiesPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">My properties</h1>
-        <p className="mt-2 text-muted-foreground">
-          Properties your agent or builder has shared with you.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">My properties</h1>
+          <p className="mt-2 text-muted-foreground">
+            Browse all available properties, save your shortlist, and share listings.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/dashboard/saved" className={buttonVariants({ variant: "outline" })}>
+            <Bookmark data-icon="inline-start" /> Saved
+          </Link>
+          <Link href="/dashboard/share-history" className={buttonVariants({ variant: "outline" })}>
+            <History data-icon="inline-start" /> Share history
+          </Link>
+        </div>
       </div>
 
       {isLoading && (
