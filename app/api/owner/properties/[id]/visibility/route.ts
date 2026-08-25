@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getPropertyDefaultVisibility, updatePropertyDefaultVisibility } from "@/lib/mock-data"
 
+export const dynamic = "force-dynamic"
+
 // DEMO DATA ONLY.
 //
 // This mock route reads and writes field-level visibility in memory so the
@@ -11,7 +13,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const { id } = await params
   const visibility = getPropertyDefaultVisibility(id)
   if (!visibility) return NextResponse.json({ error: "Not found" }, { status: 404 })
-  return NextResponse.json(visibility)
+  return NextResponse.json(visibility, { headers: { "Cache-Control": "no-store" } })
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -23,5 +25,5 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   const visibility = updatePropertyDefaultVisibility(id, body.visibility)
   if (!visibility) return NextResponse.json({ error: "Not found" }, { status: 404 })
-  return NextResponse.json(visibility)
+  return NextResponse.json(visibility, { headers: { "Cache-Control": "no-store" } })
 }

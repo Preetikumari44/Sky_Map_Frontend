@@ -56,6 +56,7 @@ function PropertyDetail({ params }: { params: Promise<{ id: string }> }) {
   const pageRef = useRef<HTMLDivElement>(null)
 
   const { data: property, mutate: mutateProperty } = useSWR<Property>(`/api/property/${id}`, fetcher)
+  const { data: defaultVisibility } = useSWR<PropertyFieldVisibility>(`/api/owner/properties/${id}/visibility`, fetcher)
   const { data: tour, error: tourError, isLoading: tourLoading } = useSWR<PropertyTour>(`/api/property/${id}/tour`, fetcher)
   const { data: vastu, error: vastuError, isLoading: vastuLoading } = useSWR<VastuReportData>(`/api/property/${id}/vastu`, fetcher)
   const { data: dimensions, error: dimensionsError, isLoading: dimensionsLoading } = useSWR<PropertyDimensions>(`/api/property/${id}/dimensions`, fetcher)
@@ -69,8 +70,8 @@ function PropertyDetail({ params }: { params: Promise<{ id: string }> }) {
   const previewShare = previewShareId ? propertyShares.find((s) => s.id === previewShareId) || null : null
   const visibility: PropertyFieldVisibility | null = useMemo(() => {
     if (previewShare) return previewShare.visibility
-    return property ? property.defaultVisibility : null
-  }, [previewShare, property])
+    return defaultVisibility || property?.defaultVisibility || null
+  }, [previewShare, defaultVisibility, property])
 
   const visibleRooms = useMemo(() => {
     if (!property?.rooms || !visibility) return []
