@@ -2,13 +2,13 @@
 
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { ArrowRight, Move3d } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/lib/auth-context"
 
-export default function LoginPage() {
+function LoginForm()  {
   const { login } = useAuth()
   const router = useRouter()
   const params = useSearchParams()
@@ -65,5 +65,12 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
+  )
+}
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   )
 }

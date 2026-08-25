@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Bookmark, Share2 } from "lucide-react"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import type { Property, ProcessingStatus } from "@/lib/types"
 
 function StatusPill({ status }: { status: ProcessingStatus }) {
@@ -43,12 +43,16 @@ export function PropertyCard({ property, onToggleSave }: { property: Property; o
         <div className="flex flex-wrap gap-2">
           <StatusPill status={property.tourStatus} />
         </div>
-        <div className="mt-auto flex gap-2 pt-1">
-          <Link href={`/dashboard/property/${property.id}`} className="flex-1">
-            <span className="flex items-center justify-center rounded-lg bg-primary py-2 text-sm text-primary-foreground hover:bg-primary/80">
-              View property
-            </span>
+        <div className="mt-auto flex flex-wrap gap-2 pt-1">
+          <Link href={`/dashboard/property/${property.id}`} className={buttonVariants({ className: "flex-1" })}>
+            View property
           </Link>
+          {onToggleSave && (
+            <Button variant="outline" onClick={() => onToggleSave(property.id)}>
+              <Bookmark data-icon="inline-start" className={property.saved ? "fill-primary text-primary" : ""} />
+              {property.saved ? "Remove saved" : "Save"}
+            </Button>
+          )}
           <Link href={`/dashboard/property/${property.id}/share`} aria-label="Share property" className={buttonVariants({ variant: "outline", size: "icon" })}>
             <Share2 />
           </Link>
